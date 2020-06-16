@@ -1,6 +1,10 @@
-INCLUDE = -I C:\\SFML\include 
-LIBS = -L C:\\SFML\lib 
-sfml1.exe: sfml1.o 
-   g++ $(LIBS) -o sfml1 sfml1.o -lsfml-window  -lsfml-graphics -lsfml-system -lsfml-network 
-sfml1.o: sfml1.cpp 
-   g++  -c $(INCLUDE) sfml1.cpp
+DIR = C:\\SFML
+CFLAGS = -I ${DIR}\include 
+LFLAGS = -L ${DIR}\lib 
+LIBS = -lsfml-window  -lsfml-graphics -lsfml-system -lsfml-network 
+server3: server3.o 
+	g++ $(LFLAGS) -o server3 server3.o ${LIBS} 
+server3.o: server3.cpp 
+	g++  -c $(CFLAGS) server3.cpp 
+
+
