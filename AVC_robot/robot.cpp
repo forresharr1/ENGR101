@@ -5,14 +5,9 @@
 using namespace std;
 
 
-
-
-
 //global varibles
 double lastLeft;
 double lastRight;
-
-
 
 
 
@@ -24,18 +19,12 @@ struct PixalLocation {
 
 
 
-
-
-
-
-
-
 void linehighlight(vector<PixalLocation>WHITEPixalFoundVector)
 {
-	//cout << "int the hilight thing"<<endl;
-	int lineHighLightingRED = 255; 
-	int lineHighLightingGREEN = 255;
-	int lineHighLightingBLUE = 0;
+	cout << "int the hilight thing"<<endl;
+	int lineHighLightingRED; 
+	int lineHighLightingGREEN;
+	int lineHighLightingBLUE;
 	int vectorSize = WHITEPixalFoundVector.size();// vector size
   int centerLine = (image.width)/2;
 	float tempRow = 0;
@@ -45,28 +34,26 @@ void linehighlight(vector<PixalLocation>WHITEPixalFoundVector)
 
 		for (PixalLocation whitepixal : WHITEPixalFoundVector )
 		{
-			
 		 	PixalLocation drawpixal;//new instance of strut
 		 	// getting the data in the new strut to the varibles tempRow and tempCol
 			tempRow = whitepixal.pixalLeftRight;
 			tempCol = whitepixal.pixalUpDown;
-
-      
+      //set color of pixle 
+      lineHighLightingRED = 255; 
+	    lineHighLightingGREEN = 255;
+	    lineHighLightingBLUE = 0;
     }
 
     for (PixalLocation whitepixal : WHITEPixalFoundVector )
 		{
-			
 		 	PixalLocation drawpixal;//new instance of strut
 		 	// getting the data in the new strut to the varibles tempRow and tempCol
 			tempRow = whitepixal.pixalLeftRight;
 			tempCol = whitepixal.pixalUpDown;
-
+      //set color of pixle 
       lineHighLightingRED = 0; 
 	    lineHighLightingGREEN = 0;
 	    lineHighLightingBLUE = 0;
-      
-      
 		}
 
     //changes the pixles that were in the vector 
@@ -78,7 +65,7 @@ void linehighlight(vector<PixalLocation>WHITEPixalFoundVector)
 
 
 void drive(vector<PixalLocation>WHITEPixalFoundVector){
-
+  cout << "int the drive thing"<<endl;  
   int vectorSize = WHITEPixalFoundVector.size();// vector size
   int centerLine = (image.width)/2;// middle of the immage 
   
@@ -137,15 +124,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector){
   setMotors(vLeft,vRight);
 }
 
-
-
-
-
-
-
-
-		 
-			
+	
 int main(){
 	if (initClientRobot() !=0){
     std::vector<PixalLocation>WHITEPixalFoundVector;// makeing a vector to hold the data of red pixals
@@ -210,7 +189,7 @@ int main(){
     //std::cout<<" vLeft="<<vLeft<<"  vRight="<<vRight<<std::endl;
     usleep(10000);
     linehighlight(WHITEPixalFoundVector);// calling on the highlight function so the line that is detected is hilighted
-    drive(WHITEPixalFoundVector);
+    drive(WHITEPixalFoundVector);// calling on the drive function so that the robot drives where it needs to
   } //while
   
 } // main

@@ -106,7 +106,8 @@ unsigned char get_pixel( ImagePPM image,int row,int col, int color)
     return -2; //error
 }
 
-int set_pixel(ImagePPM& image, int row, int col, unsigned char red,unsigned char green,unsigned char blue)
+int set_pixel(ImagePPM& image, int row, int col,
+              unsigned char red,unsigned char green,unsigned char blue)
 {
     //int address = image.width*row*4 + col*4; // RPI
     int address = image.width*row*3 + col*3;  // standard ppm
