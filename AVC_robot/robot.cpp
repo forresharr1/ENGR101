@@ -111,7 +111,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector){
   // we can assume the line has been lost and we need to find it again
   // once the line is found again it will drive as normal 
   else{
-    cout<<"line has been lost atempting to relocate"<<endl;
+   // cout<<"line has been lost atempting to relocate"<<endl;
     //left turn
     if(lastLeft > lastRight){
       vLeft = 20;
@@ -154,8 +154,8 @@ int main(){
     
 
     //theses 2 for loops loop over every pixal in the robots vision and look for where the white line is
-    for (int rowI = 0 ;  cameraView.width > rowI ; rowI++){// loops the height pixals arfter doing every pixal in that row
-      for (int colI = 0 ;  cameraView.height > colI ; colI++){// loops the pixals across from left to right (i think)
+    for (int rowI = 0 ;  cameraView.height > rowI ; rowI++){// loops the height pixals arfter doing every pixal in that row
+      for (int colI = 0 ;  cameraView.width > colI ; colI++){// loops the pixals across from left to right (i think)
       
         //stores the RGB values in their respective varibles
         pixalRED   = get_pixel( cameraView , rowI , colI , 0);
