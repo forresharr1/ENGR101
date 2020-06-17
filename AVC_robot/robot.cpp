@@ -127,8 +127,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector){
 	
 int main(){
 	if (initClientRobot() !=0){
-    std::vector<PixalLocation>WHITEPixalFoundVector;// makeing a vector to hold the data of red pixals
-    std::vector<PixalLocation>centerPixals;// makeing a vector to hold the data of red pixals
+    
 		std::cout<<" Error initializing robot"<<std::endl;
 	}
   double vLeft = 0.0;
@@ -138,6 +137,12 @@ int main(){
   SavePPMFile("i0.ppm",cameraView);
 
   while(1){
+    std::vector<PixalLocation>WHITEPixalFoundVector;// makeing a vector to hold the data of red pixals
+    std::vector<PixalLocation>centerPixals;// makeing a vector to hold the data of red pixals
+
+
+
+
    double WHITEsensitivity = 240; // sensitivity of whitness out of 255 
    int centerLine = (image.width)/2;// middle of the immage 
    //these will hold the raw color of each pixal
