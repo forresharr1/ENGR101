@@ -17,6 +17,12 @@ struct PixalLocation {
 	int pixalUpDown =0;
 };
 
+ImagePPM{
+	int width, height;
+	int n_bytes;
+	char* data;
+} cameraView;
+
 
 
 void linehighlight(vector<PixalLocation>WHITEPixalFoundVector)
@@ -57,7 +63,7 @@ void linehighlight(vector<PixalLocation>WHITEPixalFoundVector)
 		}
 
     //changes the pixles that were in the vector 
-			set_pixel( tempRow, tempCol , (char) lineHighLightingRED , (char) lineHighLightingGREEN , (char) lineHighLightingBLUE );
+			set_pixel(cameraView, tempRow, tempCol , (char) lineHighLightingRED , (char) lineHighLightingGREEN , (char) lineHighLightingBLUE );
 		SavePPMFile("i0.ppm",cameraView);// save the immage name of the file (will constantly overwrite its self)
 }
 
@@ -152,7 +158,7 @@ int main(){
     
 
     //theses 2 for loops loop over every pixal in the robots vision and look for where the white line is
-    for (int rowI = 0 ;  image.height > rowI ; rowI++){// loops the height pixals arfter doing every pixal in that row
+    for (int rowI = 0 ;  immageHight > rowI ; rowI++){// loops the height pixals arfter doing every pixal in that row
       for (int colI = 0 ;  image.width > colI ; colI++){// loops the pixals across from left to right (i think)
       
         //stores the RGB values in their respective varibles
