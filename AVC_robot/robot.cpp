@@ -17,11 +17,6 @@ struct PixalLocation {
 	int pixalUpDown =0;
 };
 
-ImagePPM{
-	int width, height;
-	int n_bytes;
-	char* data;
-} cameraView;
 
 
 
@@ -32,7 +27,7 @@ void linehighlight(vector<PixalLocation>WHITEPixalFoundVector)
 	int lineHighLightingGREEN;
 	int lineHighLightingBLUE;
 	int vectorSize = WHITEPixalFoundVector.size();// vector size
-  int centerLine = (image.width)/2;
+  int centerLine = (cameraView.width)/2;
 	float tempRow = 0;
 	float tempCol = 0;
 	
@@ -73,7 +68,7 @@ void linehighlight(vector<PixalLocation>WHITEPixalFoundVector)
 void drive(vector<PixalLocation>WHITEPixalFoundVector){
   cout << "int the drive thing"<<endl;  
   int vectorSize = WHITEPixalFoundVector.size();// vector size
-  int centerLine = (image.width)/2;// middle of the immage 
+  int centerLine = (cameraView.width)/2;// middle of the immage 
   
   int leftPixals = 0;
   int rightPixals = 0;
@@ -150,7 +145,7 @@ int main(){
 
 
    double WHITEsensitivity = 240; // sensitivity of whitness out of 255 
-   int centerLine = (image.width)/2;// middle of the immage 
+   int centerLine = (cameraView.width)/2;// middle of the immage 
    //these will hold the raw color of each pixal
     float pixalRED = 0;
     float pixalGREEN = 0;
@@ -158,8 +153,8 @@ int main(){
     
 
     //theses 2 for loops loop over every pixal in the robots vision and look for where the white line is
-    for (int rowI = 0 ;  immageHight > rowI ; rowI++){// loops the height pixals arfter doing every pixal in that row
-      for (int colI = 0 ;  image.width > colI ; colI++){// loops the pixals across from left to right (i think)
+    for (int rowI = 0 ;  cameraView.height > rowI ; rowI++){// loops the height pixals arfter doing every pixal in that row
+      for (int colI = 0 ;  cameraView.width > colI ; colI++){// loops the pixals across from left to right (i think)
       
         //stores the RGB values in their respective varibles
         pixalRED   = get_pixel( cameraView , rowI , colI , 0);
