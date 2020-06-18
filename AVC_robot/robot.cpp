@@ -95,7 +95,7 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
 	float tempCol = 0;
 	
 
-  cout<<"red pixal vector"<<redVectorSize<<endl;
+  
  
   for (PixalLocation redpixal : REDPixalFoundVector )
   {
@@ -180,7 +180,7 @@ void linehighlight(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocat
 
 
 void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDPixalFoundVector ){
-  cout << "int the drive thing"<<endl;  
+  //cout << "int the drive thing"<<endl;  
   int whitevectorSize = WHITEPixalFoundVector.size();// vector size
   int  redVectorSize = REDPixalFoundVector.size();// vector size
   int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
@@ -197,7 +197,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
 	float tempRow = 0;
 	float tempCol = 0;
 	
-
+  cout << "white size"<< whitevectorSize <<endl;  
 
   //white LINE folowing
   if (whitevectorSize > pixalDectectionSensitivity){
@@ -340,11 +340,13 @@ int main(){
     usleep(10000);
     linehighlight(WHITEPixalFoundVector, centerPixals);// calling on the highlight function so the line that is detected is hilighted
     drive(WHITEPixalFoundVector, REDPixalFoundVector);// calling on the drive function so that the robot drives where it needs to
+
+    WHITEPixalFoundVector.clear();// clear the vector to hold the data of white pixals
+    centerPixals.clear();// clear the vector to hold the data of center pixals
+    REDPixalFoundVector.clear();// clear the vector to hold the data of red pixals
   } //while
   
-  WHITEPixalFoundVector.clear();// clear the vector to hold the data of white pixals
-  centerPixals.clear();// clear the vector to hold the data of center pixals
-  REDPixalFoundVector.clear();// clear the vector to hold the data of red pixals
+  
 
 
 } // main
