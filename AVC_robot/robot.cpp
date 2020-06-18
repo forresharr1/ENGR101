@@ -65,9 +65,7 @@ void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
     // 	if the white is on the right then adds one to the rightwhitePixals
     if(centerLine   < tempRow){rightwhitePixals++;}
   }
-  //stores the last movment so if the line is lost then it can continue turning that way to find the line 
-  lastLeft = leftWhitePixals;
-	lastRight = rightwhitePixals;
+ 
   //storeing the varibles to do math with later 
   whitevLeft = leftWhitePixals;
   whitevRight = rightwhitePixals;
@@ -109,17 +107,13 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
     tempCol = whitepixal.pixalUpDown;
 
     // 	if the white is on the left then adds one to the leftWhitePixals
-    if(centerLine > tempRow){leftWhitePixals++;}
+    if(centerLine > tempRow){leftRedPixals++;}
     // 	if the white is on the right then adds one to the rightwhitePixals
-    if(centerLine < tempRow){rightwhitePixals++;}
+    if(centerLine < tempRow){rightRedPixals++;}
   }
   //stores the leftWhitePixals & rightwhitePixals as vLeft & vRight and uses them as the motor speed
-  whitevLeft = leftWhitePixals;
-  whitevRight = rightwhitePixals;
-
-  //stores the last movment so if the line is lost then it can continue turning that way to find the line 
-  lastLeft = leftWhitePixals;
-  lastRight = vRight;
+  whitevLeft = leftRedPixals;
+  whitevRight = rightRedPixals;
 
   // resets the varibles to 0 so the robot doesn't combine the motor speed with the last movement
   leftRedPixals = 0;
@@ -192,6 +186,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
   int  redVectorSize = REDPixalFoundVector.size();// vector size
   int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
   int centerLine = (cameraView.width)/2;// middle of the immage 
+  bool lostLine = false;
   
   int leftWhitePixals = 0;
   int rightwhitePixals = 0;
@@ -207,12 +202,11 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
 
   //white LINE folowing
   if (whitevectorSize > pixalDectectionSensitivity){
-
     whiteLineFolow();
-    
     //RED LINE AVOIDANCE
+    //if theres also red then avoid the red
     if (redVectorSize > pixalDectectionSensitivity){
-      
+      redLineAvoid();
     }
   }
   // we can assume the line has been lost and we need to find it again
@@ -220,7 +214,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
   else{
    // cout<<"line has been lost atempting to relocate"<<endl;
     if(redVectorSize > pixalDectectionSensitivity){
-
+      redLineAvoid();
     }
     else{
       //left turn
@@ -233,9 +227,14 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
         vLeft = -20;
         vRight = 20;
       }
+      setMotors(vLeft,vRight);
+      return;
     }
-    setMotors(vLeft,vRight);
   }
+  vLeft = whitevLeft - redvLeft;
+  vRight = whitevRight - redvRight;
+
+    setMotors(vLeft,vRight);
 }
 
 
