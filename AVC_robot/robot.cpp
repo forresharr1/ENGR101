@@ -34,7 +34,7 @@ void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
 
   int whitevectorSize = WHITEPixalFoundVector.size();// vector size
   int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
-  int centerLine = (cameraView.width)/2;// middle of the immage 
+  int centerLine = (cameraView.height)/2;// middle of the immage 
   
   int leftWhitePixals = 0;
   int rightwhitePixals = 0;
