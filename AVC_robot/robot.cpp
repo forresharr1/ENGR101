@@ -29,59 +29,6 @@ struct PixalLocation {
 
 
 
-void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDPixalFoundVector){
-  cout << "int the drive thing"<<endl;  
-  int whitevectorSize = WHITEPixalFoundVector.size();// vector size
-  int  redVectorSize = REDPixalFoundVector.size();// vector size
-  int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
-  int centerLine = (cameraView.width)/2;// middle of the immage 
-  
-  int leftWhitePixals = 0;
-  int rightwhitePixals = 0;
-
-  //motor speed
-  float vLeft = 0.0;
-  float vRight = 0.0;
-  //x,y of the pixal
-	float tempRow = 0;
-	float tempCol = 0;
-	
-
-
-  //white LINE folowing
-  if (whitevectorSize > pixalDectectionSensitivity){
-
-    whiteLineFolow();
-    
-    //RED LINE AVOIDANCE
-    if (redVectorSize > pixalDectectionSensitivity){
-      
-    }
-  }
-  // we can assume the line has been lost and we need to find it again
-  // once the line is found again it will drive as normal 
-  else{
-   // cout<<"line has been lost atempting to relocate"<<endl;
-    if(redVectorSize > pixalDectectionSensitivity){
-
-    }
-    else{
-      //left turn
-      if(lastLeft > lastRight){
-        vLeft = 20;
-        vRight = -20;
-      } 
-      //right turn
-      if(lastLeft < lastRight){
-        vLeft = -20;
-        vRight = 20;
-      }
-    }
-    setMotors(vLeft,vRight);
-  }
-}
-
-
 
 void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
 
@@ -187,7 +134,7 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
 
 
 
-
+/*
 void linehighlight(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>centerPixals, )
 {
 	cout << "int the hilight thing"<<endl;
@@ -231,12 +178,65 @@ void linehighlight(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocat
 			set_pixel(cameraView, tempRow, tempCol , (char) lineHighLightingRED , (char) lineHighLightingGREEN , (char) lineHighLightingBLUE );
 		SavePPMFile("i0.ppm",cameraView);// save the immage name of the file (will constantly overwrite its self)
 }
+*/
 
 
 
 
 
 
+
+void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDPixalFoundVector){
+  cout << "int the drive thing"<<endl;  
+  int whitevectorSize = WHITEPixalFoundVector.size();// vector size
+  int  redVectorSize = REDPixalFoundVector.size();// vector size
+  int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
+  int centerLine = (cameraView.width)/2;// middle of the immage 
+  
+  int leftWhitePixals = 0;
+  int rightwhitePixals = 0;
+
+  //motor speed
+  float vLeft = 0.0;
+  float vRight = 0.0;
+  //x,y of the pixal
+	float tempRow = 0;
+	float tempCol = 0;
+	
+
+
+  //white LINE folowing
+  if (whitevectorSize > pixalDectectionSensitivity){
+
+    whiteLineFolow();
+    
+    //RED LINE AVOIDANCE
+    if (redVectorSize > pixalDectectionSensitivity){
+      
+    }
+  }
+  // we can assume the line has been lost and we need to find it again
+  // once the line is found again it will drive as normal 
+  else{
+   // cout<<"line has been lost atempting to relocate"<<endl;
+    if(redVectorSize > pixalDectectionSensitivity){
+
+    }
+    else{
+      //left turn
+      if(lastLeft > lastRight){
+        vLeft = 20;
+        vRight = -20;
+      } 
+      //right turn
+      if(lastLeft < lastRight){
+        vLeft = -20;
+        vRight = 20;
+      }
+    }
+    setMotors(vLeft,vRight);
+  }
+}
 
 
 
