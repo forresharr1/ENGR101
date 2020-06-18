@@ -69,11 +69,11 @@ void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
   //storeing the varibles to do math with later 
   whitevLeft = leftWhitePixals;
   whitevRight = rightwhitePixals;
-
-  // resets the varibles to 0 so the robot doesn't combine the motor speed with the last movement
-  leftWhitePixals = 0;
-  rightwhitePixals = 0;
 }
+
+
+
+
 
 
 
@@ -93,10 +93,7 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
   //x,y of the pixal
 	float tempRow = 0;
 	float tempCol = 0;
-	
 
-  
- 
   for (PixalLocation redpixal : REDPixalFoundVector )
   {
             
@@ -129,8 +126,8 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
 
 
 void linehighlight(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>centerPixals)
-{/*
-	cout << "int the hilight thing"<<endl;
+{
+	//cout << "int the hilight thing"<<endl;
 	int lineHighLightingRED; 
 	int lineHighLightingGREEN;
 	int lineHighLightingBLUE;
@@ -169,7 +166,7 @@ void linehighlight(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocat
 
     //changes the pixles that were in the vector 
 			set_pixel(cameraView, tempRow, tempCol , (char) lineHighLightingRED , (char) lineHighLightingGREEN , (char) lineHighLightingBLUE );
-		SavePPMFile("i0.ppm",cameraView);// save the immage name of the file (will constantly overwrite its self)*/
+		SavePPMFile("i0.ppm",cameraView);// save the immage name of the file (will constantly overwrite its self)
 }
 
 
@@ -184,7 +181,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
   int whitevectorSize = WHITEPixalFoundVector.size();// vector size
   int  redVectorSize = REDPixalFoundVector.size();// vector size
   int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
-  int centerLine = (cameraView.width)/2;// middle of the immage 
+  int centerLine = (cameraView.height)/2;// middle of the immage 
   bool lostLine = false;
   
   int leftWhitePixals = 0;
@@ -196,8 +193,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
   //x,y of the pixal
 	float tempRow = 0;
 	float tempCol = 0;
-	
-  cout << "white size"<< whitevectorSize <<endl;  
+	 
 
   //white LINE folowing
   if (whitevectorSize > pixalDectectionSensitivity){
@@ -216,6 +212,7 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
       redLineAvoid(REDPixalFoundVector);
     }
     else{
+      cout<<"ohno"<<endl;
       //left turn
       if(lastLeft > lastRight){
         vLeft = 20;
@@ -230,9 +227,15 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
       return;
     }
   }
-  vLeft = whitevLeft - redvLeft;
-  vRight = whitevRight - redvRight;
+//   /100 slows it down so it can see it better
+  vLeft = whitevLeft / 10;//- redvLeft   whitevLeft   
+  vRight = whitevRight / 10 ;//- redvRight  whitevRight
 
+  lastLeft = vLeft;
+  lastRight = vRight;
+
+  //cout<<"vLeft  "<<vLeft<<endl;
+  //cout<<"vRight "<<vRight<<endl;
     setMotors(vLeft,vRight);
 }
 
@@ -254,14 +257,15 @@ int main(){
   double vLeft = 0.0;
   double vRight = 0.0;
   
-  takePicture();
-  SavePPMFile("i0.ppm",cameraView);
+  
 
   std::vector<PixalLocation>WHITEPixalFoundVector;// makeing a vector to hold the data of white pixals
   std::vector<PixalLocation>centerPixals;// makeing a vector to hold the data of center pixals
   std::vector<PixalLocation>REDPixalFoundVector;// makeing a vector to hold the data of red pixals
   while(1){
     
+    takePicture();
+    SavePPMFile("i0.ppm",cameraView);
 
 
 
@@ -274,6 +278,11 @@ int main(){
     float pixalBLUE = 0;
     float REDpixalModifyed = pixalRED / REDpixalsensitivity;
 
+
+    //helpers
+    int redCount;
+    int whiteCount;
+
     //theses 2 for loops loop over every pixal in the robots vision and look for where the white line is
     for (int rowI = 0 ;  cameraView.height > rowI ; rowI++){// loops the height pixals arfter doing every pixal in that row
       for (int colI = 0 ;  cameraView.width > colI ; colI++){// loops the pixals across from left to right (i think)
@@ -284,6 +293,9 @@ int main(){
         pixalBLUE  = get_pixel( cameraView , rowI , colI , 2);
 
 
+        //WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT
+        //WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT
+        //WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT
         // this sees if each color (RGB) is ubove the "WHITEsensitivity" if they all are then the pixal color is white
         if(pixalRED > WHITEsensitivity){
           if(pixalGREEN > WHITEsensitivity){
@@ -296,33 +308,39 @@ int main(){
               // sending the data in the format of the strcut new strut "nextWhitePixal" to the vector "WHITEPixalFoundVector"
               WHITEPixalFoundVector.push_back(nextWhitePixal);
 
-
+              whiteCount = whiteCount+1;
             }//if 3
           }//if 2
         } //if 1
 
 
+        //RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT
+        //RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT
+        //RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT
+        //RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT    
         // see if the pixal is red then store it in a red vector
 			 	if(REDpixalModifyed > pixalGREEN )
 				 {	  
-					 //cout<<"if 1"<<endl;
+					//cout<<"if 1"<<endl;
+          
 					if(REDpixalModifyed > pixalBLUE)
 					{
-					//cout<<"if 2"<<endl;
-					 PixalLocation nextRedPixal;//new instance of strut
-					 //storing the X,Y of the pixal in the new strut
-					 nextRedPixal.pixalLeftRight = rowI; 
-					 nextRedPixal.pixalUpDown = colI;
-					 // sending the data in the new strut to the 
-					 REDPixalFoundVector.push_back(nextRedPixal);
-					 
+					  //cout<<"if 2"<<endl;
+					  PixalLocation nextRedPixal;//new instance of strut
+					  //storing the X,Y of the pixal in the new strut
+					  nextRedPixal.pixalLeftRight = rowI; 
+					  nextRedPixal.pixalUpDown = colI;
+					  // sending the data in the new strut to the 
+					  REDPixalFoundVector.push_back(nextRedPixal);
+            redCount = redCount + 1;
 					}
+          
 				}	  		
 		    
 
 
         // finds and stores the center pixals
-        if (colI == centerLine){
+        if (rowI == centerLine){
           PixalLocation centerLinePixals;//new instance of strut 
           //storing the X,Y of the pixal in the new strut
           centerLinePixals.pixalLeftRight = rowI; 
@@ -333,10 +351,23 @@ int main(){
       }//for 2
     }//for 1
 
-    //int whitevectorSize = WHITEPixalFoundVector.size();// makes the vector size a varible
-      
-    //cout<<"vector size "<<whitevectorSize<<endl;// outputs the vector size 
+    //COUT    COUT    COUT    COUT    COUT    COUT
+    //COUT    COUT    COUT    COUT    COUT    COUT
+    //COUT    COUT    COUT    COUT    COUT    COUT
+    //COUT    COUT    COUT    COUT    COUT    COUT
+    //COUT    COUT    COUT    COUT    COUT    COUT
+    cout<<"white count"<<whiteCount<<endl;
+    //cout<<"redcount"<<redCount<<endl;
+    cout<<"vector size "<<WHITEPixalFoundVector.size()<<endl;// outputs the vector size 
     //std::cout<<" vLeft="<<vLeft<<"  vRight="<<vRight<<std::endl;
+
+
+    // resetting counting varibles to 0
+    whiteCount =0;
+    redCount= 0;
+
+
+
     usleep(10000);
     linehighlight(WHITEPixalFoundVector, centerPixals);// calling on the highlight function so the line that is detected is hilighted
     drive(WHITEPixalFoundVector, REDPixalFoundVector);// calling on the drive function so that the robot drives where it needs to
@@ -345,8 +376,4 @@ int main(){
     centerPixals.clear();// clear the vector to hold the data of center pixals
     REDPixalFoundVector.clear();// clear the vector to hold the data of red pixals
   } //while
-  
-  
-
-
 } // main
