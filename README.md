@@ -5,7 +5,7 @@ https://github.com/forresharr1/ENGR101.git
 ### Step 1
 Open Command Line, Type in sudo apt-get install g++ 
 ### Step 2
-Download Geany 'sudo apt-get install geany' or download from software center(example: Ubuntu Software)
+Download Geany by Command line 'sudo apt-get install geany' or download from software center(example: Ubuntu Software)
 ### Step 3
 Go to  https://www.sfml-dev.org/download/sfml/2.5.1/ and install SFML library for linux.
 ### Step 4
