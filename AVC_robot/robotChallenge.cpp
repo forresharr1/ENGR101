@@ -13,8 +13,7 @@ float whitevRight;
 float redvLeft;
 float redvRight;
 
-bool lazystart = false;
-int coreCompChall = 0;
+bool lazystart = true;
 
 
 //struct for holding the pixal posision data in the vector
@@ -70,24 +69,6 @@ int hardRight(){
   setMotors(vLeft, vRight);
 }
 
-int lostLineFinding(){
-  
-  if(coreCompChall == 1){
-    setMotors(300,300);
-    //90d turns *2 = 180
-    hardLeft();
-    hardLeft();
-    setMotors(300,300);
-  }
-
-  else if(coreCompChall == 2){ 
-    hardLeft();
-    hardLeft();
-  }
-  else{}
-}
-
-
 
 
 void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
@@ -121,30 +102,35 @@ void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
     tempRow = whitepixal.pixalLeftRight;
     tempCol = whitepixal.pixalUpDown;
 
+
+
     if (tempRow == 90){
       // so an action is only done once
-      if(centerLine+30 < tempCol){rightHardTurn = true;}
-      else if(centerLine-30 < tempCol){leftHardTurn = true;}
-      else if(centerLine-3 > tempCol){leftBool = true;}
-      else if(centerLine+3 < tempCol){rightBool = true;}
+      if(centerLine-5 > tempCol){leftBool = true;}
+      else if(centerLine+5 < tempCol){rightBool = true;}
       else if(centerLine-5 < tempCol < centerLine+5){fowardBool = true;}
+      if(centerLine-30 > tempCol){leftHardTurn = true;}
+      //if(centerLine+30 < tempCol){rightHardTurn = true;}
+      
     }
+
   }
   // so an action is only done once
   // excuted here
-  cout<<"lazystart"<<lazystart<<endl;
+
   //hard turns for compleation
-  if(lazystart == true){
+  if(lazystart == false){
     cout<<"TURNNNNNNN    TURNNNNNNN    TURNNNNNNN    TURNNNNNNN    TURNNNNNNN    "<<endl;
+    //if(rightHardTurn == true){hardRight();}
     if(leftHardTurn == true){hardLeft();}
     return;// so other movements arnt excuted ontop of this one
+    
   }
-  else{foward();}
   
-  lazystart == true;
   if(fowardBool == true){foward();}
   if(leftBool == true){left();}
   if(rightBool == true){right();}
+
 }
 
 
@@ -159,8 +145,10 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
   int redVectorSize = REDPixalFoundVector.size();// vector size
   int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
   int centerLine = (cameraView.width)/2;// middle of the immage 
+  
   int leftRedPixals = 0;
   int rightRedPixals = 0;
+
   //motor speed
   float vLeft = 0.0;
   float vRight = 0.0;
@@ -192,6 +180,7 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
   leftRedPixals = 0;
   rightRedPixals = 0;
 }
+
 
 
 
@@ -231,7 +220,13 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
     }
     
     else{
-      lostLineFinding();
+      cout<<"ohno i got nothing capin"<<endl;
+      setMotors(600,600);
+      //90d turns *2 = 180
+      hardLeft();
+      hardLeft();
+      setMotors(300,300);
+      //hardRight();
     }
   }
 }
@@ -246,7 +241,11 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
 
 
 
-int fillVectors (){
+int main(){
+	if (initClientRobot() !=0){
+    
+		std::cout<<" Error initializing robot"<<std::endl;
+	}
   
 
   std::vector<PixalLocation>WHITEPixalFoundVector;// makeing a vector to hold the data of white pixals
@@ -363,17 +362,20 @@ int fillVectors (){
     centerPixals.clear();// clear the vector to hold the data of center pixals
     REDPixalFoundVector.clear();// clear the vector to hold the data of red pixals
   } //while
-}
+} //main
 
 
-
+/*
 int main(){
 	if (initClientRobot() !=0){
 		std::cout<<" Error initializing robot"<<std::endl;
 	}
-  cout<<"what probram do you want to run ? core, completion or challenge?"<<endl;
-  cout<<"enter 1 for core. 2 for compleation or 3 for challenge \n ";
-  cin>>coreCompChall;
+    takePicture();
+    SavePPMFile("i0.ppm",cameraView);
 
-  fillVectors();
-}//main
+    
+    usleep(10000);
+    hardRight();
+    setMotors(0,0);
+  
+}//kill later*/
