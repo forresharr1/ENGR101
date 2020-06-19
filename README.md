@@ -21,3 +21,6 @@ Go to  https://www.sfml-dev.org/download/sfml/2.5.1/ and install SFML library fo
 
 ### How to run after robot is started
 to select core, completion, or challenge code enter 1 for core code, 2 for completion code, and 3 for challenge code. Make sure you have changed the config.txt file to what you want to run. For example if you wanted to run challenge you need to change config.txt file to challenge.txt and when robot has started enter in 3 and then press enter. then it will run challenge code
+
+### How to quit server3.cpp and robot.cpp
+when you want to quit server3.cpp & robot.cpp DO NOT quit the program with the X as you normally close for example Chrome. TO QUIT PROGRAM, on the Command Line for server3.cpp & robot.cpp press "CTRL + c". This will make sure they close proberly otherwise it may give errors next time you start it again.
