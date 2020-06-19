@@ -15,6 +15,6 @@ Go to  https://www.sfml-dev.org/download/sfml/2.5.1/ and install SFML library fo
 ### Step 6
  Open robot.cpp in AVC_robot & server3.cpp in AVC_server.
 ### Step 7
- to run program firstly open server3.cpp and Make(or shift+F9) and then exeucte. Then do the same for robot.cpp but make sure you exeucte server3.cpp first.
+ to run program firstly open server3.cpp and Make(or shift+F9) and then Run(F5). Then do the same for robot.cpp but make sure you RUN server3.cpp first.
 ### Step 8
  to change from core to completion or challenge. Open config.txt in AVC_server. At the top of the file change core.txt to completion.txt or challenge.txt or vicevera.
