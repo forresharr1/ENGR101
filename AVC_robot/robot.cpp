@@ -13,7 +13,7 @@ float whitevRight;
 float redvLeft;
 float redvRight;
 
-
+bool lazystart = true;
 
 
 //struct for holding the pixal posision data in the vector
@@ -27,6 +27,47 @@ struct PixalLocation {
 
 
 
+int foward(){
+  cout<<"going foward"<<endl;
+  double vLeft = 20;
+  double vRight = 20;
+  setMotors(vLeft, vRight);
+}
+
+int reverseBool(){
+  cout<<"BEEEP BEEEP BEEEP reverseing"<<endl;
+  double vLeft = -20;
+  double vRight = -20;
+  setMotors(vLeft, vRight);
+}
+
+int left(){
+  cout<<"turning left"<<endl;
+  double vLeft  = -5;
+  double vRight = 5;
+  setMotors(vLeft, vRight);
+}
+
+int right(){
+  cout<<"turning right"<<endl;
+  double vLeft = 5;
+  double vRight = -5;
+  setMotors(vLeft, vRight);
+}
+
+int hardLeft(){
+  cout<<"turning HARD left"<<endl;
+  double vLeft = -169;
+  double vRight = 169;
+  setMotors(vLeft, vRight);
+}
+
+int hardRight(){
+  cout<<"turning HARD right"<<endl;
+  double vLeft = 169;
+  double vRight = -169;
+  setMotors(vLeft, vRight);
+}
 
 
 
@@ -34,24 +75,23 @@ void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
 
   int whitevectorSize = WHITEPixalFoundVector.size();// vector size
   int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
-  int centerLine = (cameraView.height)/2;// middle of the immage 
+  int centerLine = (cameraView.width)/2;// middle of the immage 
   
   int leftWhitePixals = 0;
   int rightwhitePixals = 0;
+  // so an action is only done once
+  bool fowardBool = false;
+  bool reverseBool = false;
+  bool leftBool = false;
+  bool rightBool = false;
+  bool hardTurn = false;
+  
 
-  //motor speed
-  float vLeft = 0.0;
-  float vRight = 0.0;
   //x,y of the pixal
 	float tempRow = 0;
 	float tempCol = 0;
 	
-
-  //WHITE LINE DRIVE ALONG
-  //WHITE LINE DRIVE ALONG
-  //WHITE LINE DRIVE ALONG
 	//cout<<"whitevectorSize"<<whitevectorSize<<endl;
-  
   for (PixalLocation whitepixal : WHITEPixalFoundVector )
   {
         
@@ -60,15 +100,21 @@ void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
     tempRow = whitepixal.pixalLeftRight;
     tempCol = whitepixal.pixalUpDown;
 
-    // 	if the white is on the left then adds one to the leftWhitePixals
-    if(centerLine > tempRow){leftWhitePixals++;}
-    // 	if the white is on the right then adds one to the rightwhitePixals
-    if(centerLine   < tempRow){rightwhitePixals++;}
+    if (tempRow == 90){
+      // so an action is only done once
+      if(centerLine-5 > tempCol){leftBool = true;}
+      else if(centerLine+5 < tempCol){rightBool = true;}
+      else if(centerLine-5 < tempCol < centerLine+5){fowardBool = true;}
+      if(tempCol == 140){hardTurn = true;}
+    }
   }
- 
-  //storeing the varibles to do math with later 
-  whitevLeft = leftWhitePixals;
-  whitevRight = rightwhitePixals;
+  // so an action is only done once
+  // excuted here
+  if(lazystart == false){if(hardTurn == true){hardLeft();}}
+  if(fowardBool == true){foward();}
+  if(leftBool == true){left();}
+  if(rightBool == true){right();}
+
 }
 
 
@@ -102,73 +148,22 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
     tempRow = redpixal.pixalLeftRight;
     tempCol = redpixal.pixalUpDown;
 
-    // 	if the white is on the left then adds one to the leftWhitePixals
+    // 	if the white is on the leftBool then adds one to the leftWhitePixals
     if(centerLine > tempRow){leftRedPixals++;}
-    // 	if the white is on the right then adds one to the rightwhitePixals
+    // 	if the white is on the rightBool then adds one to the rightwhitePixals
     if(centerLine < tempRow){rightRedPixals++;}
+    // if the white is on the centerline go fowardBool
+    
+
   }
   //stores the leftWhitePixals & rightwhitePixals as vLeft & vRight and uses them as the motor speed
-  whitevLeft = leftRedPixals;
-  whitevRight = rightRedPixals;
+  redvLeft = leftRedPixals;
+  redvRight = rightRedPixals;
 
   // resets the varibles to 0 so the robot doesn't combine the motor speed with the last movement
   leftRedPixals = 0;
   rightRedPixals = 0;
 }
-
-
-
-
-
-
-
-
-
-
-void linehighlight(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>centerPixals)
-{
-	//cout << "int the hilight thing"<<endl;
-	int lineHighLightingRED; 
-	int lineHighLightingGREEN;
-	int lineHighLightingBLUE;
-	int whitevectorSize = WHITEPixalFoundVector.size();// vector size
-  int centerLine = (cameraView.width)/2;
-	float tempRow = 0;
-	float tempCol = 0;
-	
-	//cout<<"whitevectorSize"<<whitevectorSize<<endl;
-
-		for (PixalLocation whitepixal : WHITEPixalFoundVector )
-		{
-		 	PixalLocation drawpixal;//new instance of strut
-		 	// getting the data in the new strut to the varibles tempRow and tempCol
-			tempRow = whitepixal.pixalLeftRight;
-			tempCol = whitepixal.pixalUpDown;
-      //set color of pixle 
-      lineHighLightingRED = 255; 
-	    lineHighLightingGREEN = 255;
-	    lineHighLightingBLUE = 0;
-    }
-
-
-    //makes a black line that marks the center of the robots vision
-    for (PixalLocation centerpixal : centerPixals )
-		{
-		 	PixalLocation drawpixal;//new instance of strut
-		 	// getting the data in the new strut to the varibles tempRow and tempCol
-			tempRow = centerpixal.pixalLeftRight;
-			tempCol = centerpixal.pixalUpDown;
-      //set color of pixle to black
-      lineHighLightingRED = 0; 
-	    lineHighLightingGREEN = 0;
-	    lineHighLightingBLUE = 0;
-		}
-
-    //changes the pixles that were in the vector 
-			set_pixel(cameraView, tempRow, tempCol , (char) lineHighLightingRED , (char) lineHighLightingGREEN , (char) lineHighLightingBLUE );
-		SavePPMFile("i0.ppm",cameraView);// save the immage name of the file (will constantly overwrite its self)
-}
-
 
 
 
@@ -198,45 +193,25 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
   //white LINE folowing
   if (whitevectorSize > pixalDectectionSensitivity){
     whiteLineFolow(WHITEPixalFoundVector);
-    //RED LINE AVOIDANCE
-    //if theres also red then avoid the red
-    if (redVectorSize > pixalDectectionSensitivity){
-      redLineAvoid(REDPixalFoundVector);
-    }
   }
   // we can assume the line has been lost and we need to find it again
   // once the line is found again it will drive as normal 
+  // if theres red use that to drive along
   else{
    // cout<<"line has been lost atempting to relocate"<<endl;
     if(redVectorSize > pixalDectectionSensitivity){
       redLineAvoid(REDPixalFoundVector);
     }
+    
     else{
-      cout<<"ohno"<<endl;
-      //left turn
-      if(lastLeft > lastRight){
-        vLeft = 20;
-        vRight = -20;
-      } 
-      //right turn
-      if(lastLeft < lastRight){
-        vLeft = -20;
-        vRight = 20;
-      }
-      setMotors(vLeft,vRight);
-      return;
+      cout<<"ohno i got nothing capin"<<endl;
+      for (int i = 0 ; i < 50 ; i++){foward();}
+      
+      //90d turns *2 = 180
+      hardRight();
+      hardRight();
     }
   }
-//   /100 slows it down so it can see it better
-  vLeft = whitevLeft / 10;//- redvLeft   whitevLeft   
-  vRight = whitevRight / 10 ;//- redvRight  whitevRight
-
-  lastLeft = vLeft;
-  lastRight = vRight;
-
-  //cout<<"vLeft  "<<vLeft<<endl;
-  //cout<<"vRight "<<vRight<<endl;
-    setMotors(vLeft,vRight);
 }
 
 
@@ -254,9 +229,6 @@ int main(){
     
 		std::cout<<" Error initializing robot"<<std::endl;
 	}
-  double vLeft = 0.0;
-  double vRight = 0.0;
-  
   
 
   std::vector<PixalLocation>WHITEPixalFoundVector;// makeing a vector to hold the data of white pixals
@@ -285,7 +257,7 @@ int main(){
 
     //theses 2 for loops loop over every pixal in the robots vision and look for where the white line is
     for (int rowI = 0 ;  cameraView.height > rowI ; rowI++){// loops the height pixals arfter doing every pixal in that row
-      for (int colI = 0 ;  cameraView.width > colI ; colI++){// loops the pixals across from left to right (i think)
+      for (int colI = 0 ;  cameraView.width > colI ; colI++){// loops the pixals across from leftBool to rightBool (i think)
       
         //stores the RGB values in their respective varibles
         pixalRED   = get_pixel( cameraView , rowI , colI , 0);
@@ -297,22 +269,23 @@ int main(){
         //WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT
         //WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT
         // this sees if each color (RGB) is ubove the "WHITEsensitivity" if they all are then the pixal color is white
-        if(pixalRED > WHITEsensitivity){
-          if(pixalGREEN > WHITEsensitivity){
-            if(pixalBLUE > WHITEsensitivity){
-                
-              PixalLocation nextWhitePixal;//new instance of strut 
-              //storing the X,Y of the pixal in the new strut
-              nextWhitePixal.pixalLeftRight = rowI; 
-              nextWhitePixal.pixalUpDown = colI;
-              // sending the data in the format of the strcut new strut "nextWhitePixal" to the vector "WHITEPixalFoundVector"
-              WHITEPixalFoundVector.push_back(nextWhitePixal);
+        //if(rowI = 0){// only takes the data from row 0 for the vector
+          if(pixalRED > WHITEsensitivity){
+            if(pixalGREEN > WHITEsensitivity){
+              if(pixalBLUE > WHITEsensitivity){
+                  
+                PixalLocation nextWhitePixal;//new instance of strut 
+                //storing the X,Y of the pixal in the new strut
+                nextWhitePixal.pixalLeftRight = rowI; 
+                nextWhitePixal.pixalUpDown = colI;
+                // sending the data in the format of the strcut new strut "nextWhitePixal" to the vector "WHITEPixalFoundVector"
+                WHITEPixalFoundVector.push_back(nextWhitePixal);
 
-              whiteCount = whiteCount+1;
-            }//if 3
-          }//if 2
-        } //if 1
-
+                whiteCount = whiteCount+1;
+              }//if 3
+            }//if 2
+          } //if 1
+       // }//row 0
 
         //RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT
         //RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT     RED VECTOR INPUT
@@ -322,7 +295,6 @@ int main(){
 			 	if(REDpixalModifyed > pixalGREEN )
 				 {	  
 					//cout<<"if 1"<<endl;
-          
 					if(REDpixalModifyed > pixalBLUE)
 					{
 					  //cout<<"if 2"<<endl;
@@ -356,9 +328,8 @@ int main(){
     //COUT    COUT    COUT    COUT    COUT    COUT
     //COUT    COUT    COUT    COUT    COUT    COUT
     //COUT    COUT    COUT    COUT    COUT    COUT
-    cout<<"white count"<<whiteCount<<endl;
     //cout<<"redcount"<<redCount<<endl;
-    cout<<"vector size "<<WHITEPixalFoundVector.size()<<endl;// outputs the vector size 
+    //cout<<"white vector size "<<WHITEPixalFoundVector.size()<<endl;// outputs the vector size 
     //std::cout<<" vLeft="<<vLeft<<"  vRight="<<vRight<<std::endl;
 
 
@@ -369,11 +340,25 @@ int main(){
 
 
     usleep(10000);
-    linehighlight(WHITEPixalFoundVector, centerPixals);// calling on the highlight function so the line that is detected is hilighted
     drive(WHITEPixalFoundVector, REDPixalFoundVector);// calling on the drive function so that the robot drives where it needs to
-
     WHITEPixalFoundVector.clear();// clear the vector to hold the data of white pixals
     centerPixals.clear();// clear the vector to hold the data of center pixals
     REDPixalFoundVector.clear();// clear the vector to hold the data of red pixals
   } //while
-} // main
+} //main
+
+
+/*
+int main(){
+	if (initClientRobot() !=0){
+		std::cout<<" Error initializing robot"<<std::endl;
+	}
+    takePicture();
+    SavePPMFile("i0.ppm",cameraView);
+
+    
+    usleep(10000);
+    hardRight();
+    setMotors(0,0);
+  
+}//kill later*/
