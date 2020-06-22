@@ -77,20 +77,20 @@ int hardRight(){
 
 int chalHardLeft(){
   cout<<"turning HARD left"<<endl;
-  setMotors(0,0);
   double vLeft = -169;
   double vRight = 169;
   setMotors(vLeft, vRight);
-  setMotors(0,0);
+  stop();
+  foward();
 }
 
 int chalHardRight(){
   cout<<"turning HARD left"<<endl;
-  setMotors(0,0);
   double vLeft = 169;
   double vRight = -169;
   setMotors(vLeft, vRight);
-  setMotors(0,0);
+  stop();
+  foward();
 }
 
 
@@ -112,11 +112,7 @@ int lostLineFinding(){
     hardLeft();
   }
   else if(coreCompChall == 3){
-    setMotors(1000,1000);
-    chalHardRight();
-    stop();
   }
-  else{}
 }
 
 
@@ -214,13 +210,11 @@ void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
 
     if (tempRow == 90){
       // so an action is only done once
-
       if(coreCompChall == 1 || 3){
         if(centerLine-5 > tempCol){leftBool = true;}
         else if(centerLine+5 < tempCol){rightBool = true;}
         else if(centerLine-5 < tempCol < centerLine+5){fowardBool = true;}
       }
-
     }
   }
   // so an action is only done once
@@ -239,100 +233,8 @@ void whiteLineFolow (vector<PixalLocation>WHITEPixalFoundVector){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void redTurning(vector<PixalLocation>REDPixalFoundVector){
-  int vsize = REDPixalFoundVector.size();
-  int centerLine = (cameraView.width)/2;// middle of the immage 
-  bool fowardBool = false;
-  bool reverseBool = false;
-  int leftBool  = 0;
-  int rightBool = 0;
-  bool rightHardTurn = false;
-  bool leftHardTurn = false;
-  bool foundWall = false;
-  
-  for (PixalLocation redpixal2 : REDPixalFoundVector )
-  {
-    PixalLocation drawpixal;//new instance of strut
-    // getting the data in the new strut to the varibles tempRow and tempCol
-    int tempRowScan2 = redpixal2.pixalLeftRight;
-    int tempColScan2 = redpixal2.pixalUpDown;
-      if (tempColScan2 == 1)
-      {
-          rightBool++;
-      }
-      if (tempColScan2 == 149)
-      {
-          leftBool++;
-      }
-      
-      if(centerLine-5 < tempRowScan2 < centerLine+5){
-        fowardBool = true;
-        cout<<"ememememememmememe"<<endl;
-      }
-  }
-
-  if(fowardBool == true){
-    if ( rightBool > leftBool ){
-      chalHardLeft();
-      chalHardLeft();
-      chalHardLeft();
-      return;
-    }
-    
-    else if ( rightBool < leftBool ){
-      chalHardRight();
-      chalHardRight();
-      chalHardRight();
-      return;
-    }
-  }
-
-  if (fowardBool == false){
-    if (rightBool=0){
-      if (leftBool  =0){
-        setMotors(600,600);
-        chalHardRight();
-        setMotors(600,600);
-      }
-    }
-  }
-  else if (fowardBool == false){
-    cout<<"helooooooooooooooooooooooooooooooooo"<<endl;
-    foward();
-    return;
-  }
-  
-}
-
-
 void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
-
-  int redvectorSize = 0;
-  redvectorSize = REDPixalFoundVector.size();// vector size
-  
-  int pixalDectectionSensitivity = 5;// how many is the minimum pixles in the vector to count as thing being detected
+  int redvectorSize = REDPixalFoundVector.size();// vector size
   int centerLine = (cameraView.width)/2;// middle of the immage 
   int leftCamEdge = 1;// middle of the immage
   int rightCamEdge = (cameraView.width)-1;// middle of the immage
@@ -340,19 +242,14 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
   int leftWhitePixals = 0;
   int rightwhitePixals = 0;
   // so an action is only done once
-  bool fowardBool = false;
-  bool reverseBool = false;
-  bool leftBool = false;
-  bool rightBool = false;
-  bool rightHardTurn = false;
-  bool leftHardTurn = false;
-  bool plzDontSpin = false;
+  bool turn = false;
+  bool wallOnLeft = false;
+  bool wallOnRight = false;
+  
   //x,y of the pixal
 	float tempRow = 0;
 	float tempCol = 0;
-  float tempRowScan2 = 0;
-	float tempColScan2 = 0;
-	cout <<"redvectorSize                "<<redvectorSize<<endl;
+
 	//cout<<"whitevectorSize"<<whitevectorSize<<endl;
   for (PixalLocation redpixal : REDPixalFoundVector )
   {   
@@ -361,39 +258,41 @@ void redLineAvoid (vector<PixalLocation>REDPixalFoundVector){
     tempRow = redpixal.pixalLeftRight;
     tempCol = redpixal.pixalUpDown;
 
-    if (tempRow == 90)
-    {//limmates the rows to one line
-      if(centerLine-10 < tempRow < centerLine+10)
-      {
-        cout<<"red aheadred aheadred aheadred aheadred ahead"<<endl;
-        foward();
-      }  
-      else{
-        plzDontSpin = true;
-      }
+    //is there a wall ahead
+    if (tempCol == 75 && tempRow == 80){
+      //we need to turn
+      turn = true;
     }
-  } 
-  if(plzDontSpin == true){
-    redTurning(REDPixalFoundVector);return;
+    //is there a wall to the left
+    if(tempCol == 5 && tempRow == 90){
+      wallOnLeft = true;
+    }
+    //is there a wall to the right
+    if(tempCol == 140 && tempRow == 90){
+      wallOnRight = true;
+    }
   }
+  if(REDPixalFoundVector.size() == 0){
+    for(int i = 0 ; i < 40 ; i++){
+      foward();
+    }
+    chalHardRight();
+    for(int i = 0 ; i < 45 ; i++){
+      foward();
+    }
+    chalHardLeft();
+    return;
+  }
+  //if we need to turn turn aproperitly if not go foward
+  if (turn == true){
+    if(wallOnRight == true){chalHardLeft();}
+    if(wallOnLeft == true){chalHardRight();}
+  }
+   else if(turn){
+    foward();
+  }
+  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDPixalFoundVector ){
@@ -448,9 +347,10 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
       whiteLineFolow(WHITEPixalFoundVector);
     }
     // white line has been lost so now use red
-    else if (redVectorSize > pixalDectectionSensitivity){
+    else{
       redLineAvoid(REDPixalFoundVector);
     }
+    
   }
 }
 
@@ -460,31 +360,26 @@ void drive(vector<PixalLocation>WHITEPixalFoundVector, vector<PixalLocation>REDP
 
 
 int fillVectors (){
-  
+  //initialise robot posion relitive to line
   foward();
   stop();
 
   std::vector<PixalLocation>WHITEPixalFoundVector;// makeing a vector to hold the data of white pixals
-  std::vector<PixalLocation>centerPixals;// makeing a vector to hold the data of center pixals
   std::vector<PixalLocation>REDPixalFoundVector;// makeing a vector to hold the data of red pixals
   while(1){
     
     takePicture();
     SavePPMFile("i0.ppm",cameraView);
 
-
-
    int WHITEsensitivity = 240; // sensitivity of whitness out of 255
    int REDpixalsensitivity  = 1.30; // sensitivity of redness as a persentage plus one
-   int centerLine = (cameraView.width)/2;// middle of the immage 
    //these will hold the raw color of each pixal
     float pixalRED = 0;
     float pixalGREEN = 0;
     float pixalBLUE = 0;
     float REDpixalModifyed = pixalRED / REDpixalsensitivity;
 
-
-    //helpers
+    //helpers counters
     int redCount;
     int whiteCount;
 
@@ -533,31 +428,14 @@ int fillVectors (){
             }
           }
 				}	  		
-		    
-
-
-        // finds and stores the center pixals
-        if (rowI == centerLine){
-          PixalLocation centerLinePixals;//new instance of strut 
-          //storing the X,Y of the pixal in the new strut
-          centerLinePixals.pixalLeftRight = rowI; 
-          centerLinePixals.pixalUpDown = colI;
-          // sending the data in the format of the strcut new strut "centerLinePixals" to the vector "centerPixals"
-          centerPixals.push_back(centerLinePixals);
-        }
       }//for 2
     }//for 1
-
     // resetting counting varibles to 0
     whiteCount =0;
     redCount= 0;
-
-
-
     usleep(10000);
     drive(WHITEPixalFoundVector, REDPixalFoundVector);// calling on the drive function so that the robot drives where it needs to
     WHITEPixalFoundVector.clear();// clear the vector to hold the data of white pixals
-    centerPixals.clear();// clear the vector to hold the data of center pixals
     REDPixalFoundVector.clear();// clear the vector to hold the data of red pixals
   } //while
 }
