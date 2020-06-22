@@ -393,6 +393,9 @@ int fillVectors (){
         pixalBLUE  = get_pixel( cameraView , rowI , colI , 2);
 
 
+        //WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT
+        //WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT
+        //WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT     WHITE VECTOR INPUT
         // this sees if each color (RGB) is ubove the "WHITEsensitivity" if they all are then the pixal color is white
         //if(rowI = 0){// only takes the data from row 0 for the vector
           if(pixalRED > WHITEsensitivity){
